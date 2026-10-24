@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Secure Authentication Portal</title>
+  <link rel="stylesheet" href="static/css/dashboard.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z'/></svg>">
+</head>
+<body class="dashboard-body">
+
+  <div class="app-layout">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon">🛡️</div>
+        <div>
+          <span class="sidebar-brand-name">SecurePortal</span>
+          <span class="sidebar-brand-subtitle">Verified Account</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button type="button" class="nav-item active" data-tab="overview">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </button>
+        <button type="button" class="nav-item" data-tab="profile">
+          <span class="nav-icon">👤</span>
+          <span>My Profile</span>
+        </button>
+        <button type="button" class="nav-item" data-tab="security">
+          <span class="nav-icon">🔐</span>
+          <span>Security Center</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-mini-card">
+          <div id="sideAvatar" class="user-mini-avatar">US</div>
+          <div class="user-mini-info">
+            <div id="sideName" class="user-mini-name">Loading...</div>
+            <div id="sideEmail" class="user-mini-email">user@example.com</div>
+          </div>
+        </div>
+        <button type="button" id="sideLogoutBtn" class="sidebar-logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      
+      <!-- Top Navigation -->
+      <header class="top-nav">
+        <div class="top-nav-title">
+          <span>Portal Dashboard</span>
+        </div>
+        <div class="top-nav-right">
+          <div id="liveDate" class="date-pill">📅 Loading date...</div>
+          <div class="status-badge">
+            <span class="status-dot"></span>
+            <span>Active Session</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Container -->
+      <main class="content-body">
+
+        <!-- Notification Box -->
+        <div id="dashNotification" class="dash-alert"></div>
+
+        <!-- 1. OVERVIEW VIEW -->
+        <section id="view-overview" class="dash-view-section active">
+          
+          <!-- Hero Banner -->
+          <div class="welcome-hero">
+            <h1>Welcome back, <span id="heroUserName">User</span>! 👋</h1>
+            <p>You have successfully authenticated into your secure account portal. Here is a summary of your profile, account security, and active credentials.</p>
+            <div class="hero-badges">
+              <span class="hero-pill">🛡️ Encrypted with Scrypt / SHA-256</span>
+              <span id="hero2faBadge" class="hero-pill">⚠️ 2FA Disabled</span>
+              <span class="hero-pill">🎂 Age: <span id="heroUserAge">--</span> yrs</span>
+            </div>
+          </div>
+
+          <!-- KPI Stats Grid -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-blue">📅</div>
+              <div class="kpi-info">
+                <span class="kpi-label">Date of Birth</span>
+                <span id="kpiDob" class="kpi-value">--</span>
+                <span class="kpi-hint">Age: <strong id="kpiAge">--</strong> years old</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-green">🛡️</div>
+              <div class="kpi-info">
+                <span class="kpi-label">Security Health</span>
+                <span id="kpiSecurityStatus" class="kpi-value">Protected</span>
+                <span class="kpi-hint">Salted Hash + Session Auth</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-purple">✉️</div>
+              <div class="kpi-info">
+                <span class="kpi-label">Primary Email</span>
+                <span id="kpiEmail" class="kpi-value" style="font-size: 15px; word-break: break-all;">--</span>
+                <span class="kpi-hint">Registered login ID</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-amber">⏱️</div>
+              <div class="kpi-info">
+                <span class="kpi-label">Member Since</span>
+                <span id="kpiJoined" class="kpi-value" style="font-size: 15px;">Today</span>
+                <span class="kpi-hint">Active account</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two Column Content -->
+          <div class="dashboard-columns">
+            
+            <!-- Left: Profile Summary -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <span class="dash-card-title">👤 Account Information</span>
+                <span class="badge-tag badge-success">Verified</span>
+              </div>
+
+              <div class="info-row">
+                <span class="info-key">Full Name</span>
+                <span id="cardName" class="info-value">--</span>
+              </div>
+              <div class="info-row">
+                <span class="info-key">Email Address</span>
+                <span id="cardEmail" class="info-value">--</span>
+              </div>
+              <div class="info-row">
+                <span class="info-key">Mobile Number</span>
+                <span id="cardPhone" class="info-value">--</span>
+              </div>
+              <div class="info-row">
+                <span class="info-key">Date of Birth</span>
+                <span id="cardDob" class="info-value">--</span>
+              </div>
+              <div class="info-row">
+                <span class="info-key">Calculated Age</span>
+                <span id="cardAge" class="info-value">--</span>
+              </div>
+              <div class="info-row">
+                <span class="info-key">Two-Factor Authentication</span>
+                <span id="card2fa" class="info-value">○ Disabled</span>
+              </div>
+              <div class="info-row">
+                <span class="info-key">Password Encryption</span>
+                <span class="info-value" style="color: #16a34a;">● Salted SHA-256 / Scrypt Hash</span>
+              </div>
+            </div>
+
+            <!-- Right: Recent Security Summary -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <span class="dash-card-title">🛡️ Security Summary</span>
+                <button type="button" class="dash-btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="document.querySelector('[data-tab=\'security\']').click()">Go to Security</button>
+              </div>
+
+              <div class="info-row">
+                <span class="info-key">Password Status</span>
+                <span class="info-value">Updated & Protected</span>
+              </div>
+              <div class="info-row">
+                <span class="info-key">2-Step Verification</span>
+                <span id="summary2faStatus" class="info-value">Turned Off</span>
+              </div>
+              <div class="info-row">
+                <span class="info-key">Current Device</span>
+                <span class="info-value">Windows PC (Active Now)</span>
+              </div>
+              <div class="info-row">
+                <span class="info-key">Session Health</span>
+                <span class="badge-tag badge-success">Protected Session</span>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- 2. MY PROFILE VIEW -->
+        <section id="view-profile" class="dash-view-section">
+          <div class="dash-card" style="max-width: 600px;">
+            <div class="dash-card-header">
+              <span class="dash-card-title">👤 Edit Profile Information</span>
+            </div>
+            
+            <form id="editProfileForm">
+              <div class="dash-form-group">
+                <label for="editName">Full Name</label>
+                <input type="text" id="editName" required>
+              </div>
+
+              <div class="dash-form-group">
+                <label for="editEmail">Email Address (Read-only)</label>
+                <input type="email" id="editEmail" disabled style="opacity: 0.7; cursor: not-allowed;">
+              </div>
+
+              <div class="dash-form-group">
+                <label for="editDob">Date of Birth</label>
+                <input type="date" id="editDob" required>
+              </div>
+
+              <div class="dash-form-group">
+                <label for="editPhone">Mobile Number</label>
+                <input type="tel" id="editPhone" placeholder="+91 98765 43210">
+              </div>
+
+              <button type="submit" id="saveProfileBtn" class="dash-btn-primary">
+                Save Profile Changes
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- 3. SECURITY CENTER VIEW (Password Change, 2FA, Login Activity) -->
+        <section id="view-security" class="dash-view-section">
+          
+          <!-- FEATURE 1: TWO-STEP AUTHENTICATION (2FA) -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <span class="dash-card-title">📱 Two-Step Authentication (2FA)</span>
+              <span id="twoFactorBadge" class="badge-tag badge-warning">Disabled</span>
+            </div>
+
+            <div class="two-factor-banner">
+              <div class="two-factor-status">
+                <div id="twoFactorIcon" class="two-factor-icon icon-inactive">⚠️</div>
+                <div class="two-factor-info">
+                  <h4 id="twoFactorHeading">Two-Step Authentication is Turned Off</h4>
+                  <p id="twoFactorSub">Protect your account against unauthorized access with an extra security verification layer.</p>
+                </div>
+              </div>
+
+              <div>
+                <button type="button" id="toggle2faBtn" class="dash-btn-primary">Enable 2FA</button>
+              </div>
+            </div>
+
+            <!-- 2FA Setup Drawer -->
+            <div id="setup2faBox" class="setup-box">
+              <!-- Method Selector Pills -->
+              <div class="two-factor-methods">
+                <button type="button" class="two-factor-tab-btn active" id="tabSmsMethod">
+                  💬 Mobile SMS Verification
+                </button>
+                <button type="button" class="two-factor-tab-btn" id="tabAppMethod">
+                  📲 Authenticator App (QR Code)
+                </button>
+              </div>
+
+              <!-- METHOD 1: Mobile SMS OTP Verification -->
+              <div id="smsVerificationPane" class="two-factor-pane active">
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 14px;">
+                  Enter your mobile number to receive a 6-digit one-time verification code (OTP) directly via SMS.
+                </p>
+
+                <div class="dash-form-group" style="max-width: 480px;">
+                  <label for="twoFactorPhone">Mobile Number (India / Global)</label>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <div style="position: relative; flex: 1; min-width: 200px;">
+                      <input type="tel" id="twoFactorPhone" placeholder="+91 98765 43210" style="padding-left: 38px;" maxlength="16">
+                      <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 16px;">📱</span>
+                    </div>
+                    <button type="button" id="sendSmsCodeBtn" class="dash-btn-primary" style="white-space: nowrap; padding: 10px 16px;">
+                      📩 Send Code via SMS
+                    </button>
+                  </div>
+                  <span id="smsStatusHint" class="input-hint" style="font-size: 12px; margin-top: 6px; display: block; color: #64748b;">
+                    Type your mobile number and click <strong>Send Code via SMS</strong> to receive your 6-digit verification code.
+                  </span>
+                </div>
+
+                <!-- Simulated Mobile SMS Push Notification -->
+                <div id="simulatedSmsToast" class="sms-notification-toast" style="display: none;">
+                  <div class="sms-toast-header">
+                    <div class="sms-toast-sender">
+                      <span class="sms-icon">💬</span>
+                      <strong>Messages • SecurePortal</strong>
+                    </div>
+                    <span class="sms-toast-time" id="smsToastTime">Just now</span>
+                  </div>
+                  <div class="sms-toast-body">
+                    <p id="smsToastContent">
+                      Your SecurePortal verification code is <strong id="smsToastCode" class="sms-code-highlight">000000</strong>. Valid for 5 minutes. Do not share this with anyone.
+                    </p>
+                    <div class="sms-toast-actions">
+                      <button type="button" id="copySmsCodeBtn" class="sms-toast-btn">📋 Auto-Fill Code</button>
+                      <button type="button" id="dismissSmsToastBtn" class="sms-toast-btn-dismiss">✕ Dismiss</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- METHOD 2: Authenticator App (Dynamic Rotating QR Code) -->
+              <div id="appVerificationPane" class="two-factor-pane" style="display: none;">
+                <div class="qr-refresh-status">
+                  <span class="refresh-badge">
+                    <span class="pulse-dot"></span>
+                    <span>Dynamic QR Code: Rotates every 1 minute</span>
+                  </span>
+                  <span class="timer-badge">
+                    ⏱️ Expires in: <strong id="qrCountdownText">60s</strong>
+                  </span>
+                </div>
+
+                <!-- Animated 60s progress bar -->
+                <div class="qr-progress-track">
+                  <div id="qrProgressBar" class="qr-progress-bar"></div>
+                </div>
+
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">
+                  Open Google Authenticator, Microsoft Authenticator, or Authy on your mobile device and scan the dynamic QR code below. A new QR code is generated every 60 seconds.
+                </p>
+
+                <div class="qr-section" style="justify-content: center; text-align: center;">
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                    <div class="qr-box-dynamic" id="qrBox">
+                      <div id="qrCodeContainer"></div>
+                      <span class="qr-label">Scan with Authenticator App</span>
+                    </div>
+                    <button type="button" id="manualRefreshQrBtn" class="qr-refresh-btn">
+                      🔄 Refresh QR Code Now
+                    </button>
+                    <span id="secretKeyText" style="display: none;"></span>
+                  </div>
+                </div>
+
+                <!-- Backup recovery codes -->
+                <div style="margin-bottom: 20px;">
+                  <label style="font-size: 12px; font-weight: 600; color: #475569;">Emergency Backup Recovery Codes (Keep these safe):</label>
+                  <div id="backupCodesContainer" class="backup-codes-grid"></div>
+                </div>
+              </div>
+
+              <!-- Common 6-Digit Code Verification Form -->
+              <form id="verify2faForm" style="margin-top: 18px; border-top: 1px solid var(--dash-border); padding-top: 16px;">
+                <div class="dash-form-group" style="max-width: 320px;">
+                  <label for="twoFactorCodeInput" id="twoFactorCodeLabel">Enter 6-Digit Verification Code:</label>
+                  <input type="text" id="twoFactorCodeInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code" style="letter-spacing: 4px; font-size: 18px; font-weight: bold; text-align: center;" required>
+                  <span id="codeHelpHint" style="font-size: 11px; color: #64748b; margin-top: 4px; display: block;">Enter the 6-digit code received via SMS.</span>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                  <button type="submit" id="confirm2faBtn" class="dash-btn-primary">Verify & Turn On 2FA</button>
+                  <button type="button" id="cancel2faBtn" class="dash-btn-secondary">Cancel</button>
+                  <button type="button" id="resendSmsBtn" class="dash-btn-secondary" style="display: none; font-size: 12px;">🔄 Resend SMS Code</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- FEATURE 2: PASSWORD CHANGE -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <span class="dash-card-title">🔑 Change Account Password</span>
+            </div>
+
+            <form id="changePasswordForm" style="max-width: 540px;">
+              <div class="dash-form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" placeholder="••••••••" required>
+              </div>
+
+              <div class="dash-form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" placeholder="Minimum 8 characters" required>
+              </div>
+
+              <div class="dash-form-group">
+                <label for="confirmNewPassword">Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" placeholder="Re-enter new password" required>
+              </div>
+
+              <button type="submit" id="changePasswordBtn" class="dash-btn-primary">
+                Update Password
+              </button>
+            </form>
+          </div>
+
+          <!-- FEATURE 3: LOGIN ACTIVITY & SESSIONS -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <div>
+                <span class="dash-card-title">💻 Login Activity & Active Devices</span>
+                <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Recent authentication events and connected browsers associated with your account.</p>
+              </div>
+              <button type="button" id="revokeSessionsBtn" class="dash-btn-secondary" style="font-size: 12px;">
+                Revoke Other Sessions
+              </button>
+            </div>
+
+            <table class="activity-table">
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Device / Browser</th>
+                  <th>IP Address</th>
+                  <th>Timestamp</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="fullActivityList">
+                <tr>
+                  <td><strong>User Sign In</strong></td>
+                  <td>Chrome on Windows</td>
+                  <td><code>127.0.0.1 (Localhost)</code></td>
+                  <td>Today</td>
+                  <td><span class="badge-tag badge-success">Success</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Account Registered</strong></td>
+                  <td>Chrome on Windows</td>
+                  <td><code>127.0.0.1 (Localhost)</code></td>
+                  <td>Today</td>
+                  <td><span class="badge-tag badge-success">Success</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <script src="static/js/qrcode.min.js"></script>
+  <script src="static/js/dashboard.js"></script>
+</body>
+</html>

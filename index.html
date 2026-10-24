@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Login & Registration System</title>
+  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5'><path d='M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z'/></svg>">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Authentication Card -->
+    <div id="authContainer" class="auth-card">
+      
+      <!-- Brand Header -->
+      <div class="auth-header">
+        <div class="brand-icon">🔒</div>
+        <h1>Secure Authentication</h1>
+        <p>Access your portal or create a new account</p>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="tab-switch">
+        <button type="button" id="tabLogin" class="tab-btn active">Sign In</button>
+        <button type="button" id="tabRegister" class="tab-btn">Create Account</button>
+      </div>
+
+      <!-- Global Notification Alert -->
+      <div id="alertBox" class="alert-box"></div>
+
+      <!-- 1. SIGN IN FORM -->
+      <div id="loginPanel" class="form-panel active">
+        <form id="loginForm" novalidate>
+          
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="loginEmail" placeholder="name@example.com" autocomplete="email" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔑</span>
+              <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required>
+              <button type="button" id="toggleLoginPwd" class="toggle-pwd-btn" aria-label="Toggle password visibility">👁️</button>
+            </div>
+          </div>
+
+          <div class="options-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="rememberMe">
+              <span>Remember me</span>
+            </label>
+            <a href="#" id="forgotPwdLink" class="forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" id="loginBtn" class="submit-btn">
+            Sign In
+          </button>
+
+          <p class="switch-prompt">
+            Don't have an account? 
+            <a href="#" id="goToRegister" class="switch-link">Create Account</a>
+          </p>
+
+        </form>
+      </div>
+
+      <!-- 2. CREATE ACCOUNT FORM -->
+      <div id="registerPanel" class="form-panel">
+        <form id="registerForm" novalidate>
+          
+          <!-- Full Name -->
+          <div class="form-group">
+            <label for="regName">Full Name</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" id="regName" placeholder="John Doe" autocomplete="name" required>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="regEmail">Email Address</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="regEmail" placeholder="name@example.com" autocomplete="email" required>
+            </div>
+          </div>
+
+          <!-- Date of Birth -->
+          <div class="form-group">
+            <label for="regDob">Date of Birth (Enter manually or pick)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">📅</span>
+              <input type="text" id="regDob" placeholder="YYYY-MM-DD or DD/MM/YYYY" maxlength="10" autocomplete="bday" required>
+              <input type="date" id="regDobPicker" tabindex="-1" style="position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0;">
+              <button type="button" id="openDobPickerBtn" class="toggle-pwd-btn" title="Open Calendar Picker" aria-label="Open Calendar Picker">📆</button>
+            </div>
+            <span id="dobAgeHint" class="field-msg">Enter manually (e.g. 2000-05-15 or 15/05/2000)</span>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔑</span>
+              <input type="password" id="regPassword" placeholder="Minimum 8 characters" autocomplete="new-password" required>
+              <button type="button" id="toggleRegPwd" class="toggle-pwd-btn" aria-label="Toggle password visibility">👁️</button>
+            </div>
+            
+            <!-- Live Password Strength Meter -->
+            <div class="pwd-strength-container">
+              <div class="pwd-strength-meter">
+                <div id="pwdStrengthBar" class="pwd-strength-bar"></div>
+              </div>
+              <div class="pwd-rules">
+                <span id="ruleLen" class="pwd-rule">8+ characters</span>
+                <span id="ruleUpper" class="pwd-rule">Uppercase letter</span>
+                <span id="ruleNum" class="pwd-rule">Number</span>
+                <span id="ruleSpecial" class="pwd-rule">Special symbol</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group">
+            <label for="regConfirmPwd">Confirm Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="regConfirmPwd" placeholder="Re-enter your password" autocomplete="new-password" required>
+              <button type="button" id="toggleRegConfirmPwd" class="toggle-pwd-btn" aria-label="Toggle password visibility">👁️</button>
+            </div>
+            <span id="pwdMatchMsg" class="field-msg"></span>
+          </div>
+
+          <button type="submit" id="registerBtn" class="submit-btn">
+            Create Account
+          </button>
+
+          <p class="switch-prompt">
+            Already have an account? 
+            <a href="#" id="goToLogin" class="switch-link">Sign In</a>
+          </p>
+
+        </form>
+      </div>
+
+    </div>
+
+    <!-- 3. LOGGED-IN USER DASHBOARD CARD -->
+    <div id="dashboardCard" class="auth-card dashboard-card">
+      <div id="dashAvatar" class="avatar-badge">US</div>
+      <h2 id="dashName" class="dash-title">Welcome User</h2>
+      <p class="dash-subtitle">You are securely signed in</p>
+
+      <div class="profile-grid">
+        <div class="profile-item">
+          <span class="profile-label">Email Address</span>
+          <span id="dashEmail" class="profile-val">user@example.com</span>
+        </div>
+        <div class="profile-item">
+          <span class="profile-label">Date of Birth</span>
+          <span id="dashDob" class="profile-val">January 1, 2000</span>
+        </div>
+        <div class="profile-item">
+          <span class="profile-label">Calculated Age</span>
+          <span id="dashAge" class="profile-val">24 years old</span>
+        </div>
+        <div class="profile-item">
+          <span class="profile-label">Account Security</span>
+          <span class="security-badge">🛡️ Encrypted & Hashed</span>
+        </div>
+        <div class="profile-item">
+          <span class="profile-label">Member Since</span>
+          <span id="dashJoined" class="profile-val">Today</span>
+        </div>
+      </div>
+
+      <button type="button" id="logoutBtn" class="logout-btn">
+        <span>🚪</span> Sign Out
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Forgot Password Info Modal -->
+  <div id="forgotModal" class="modal-overlay">
+    <div class="modal-card">
+      <h3>Reset Password</h3>
+      <p>If this was a live production email system, a one-time password reset link would be dispatched to your email address.</p>
+      <p style="font-size: 12px; color: #64748b;">For this system, you can register a new test account or log in with your existing credentials.</p>
+      <div class="modal-actions">
+        <button type="button" id="closeForgotModal" class="btn-secondary">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="static/js/app.js"></script>
+</body>
+</html>
